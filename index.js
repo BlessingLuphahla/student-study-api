@@ -1,0 +1,31 @@
+const express = require('express');
+const cors = require('cors');
+const helmet = require('helmet');
+const connectDB = require('./config/db');
+const dotenv = require('dotenv');
+const authRoutes = require('./routes/authRoutes');
+const materialRoutes = require('./routes/materialRoutes');
+
+dotenv.config();
+connectDB();
+
+
+const app = express();
+
+// Middleware
+app.use(helmet());
+app.use(cors());
+app.use(express.json());
+
+// Port from .env or default
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+    console.log('Server running on port', PORT);
+});
+
+app.use('/api/materials', materialRoutes);
+app.use('/api/auth', authRoutes);
+
+
+
