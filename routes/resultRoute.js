@@ -5,13 +5,12 @@ const {
   getAllResults,
   getResultById
 } = require('../controllers/resultController');
-const auth = require('../middleware/auth'); // JWT middleware
 
 const router = express.Router();
 
-router.post('/results', auth, createResult);
-router.get('/results', auth, getAllResults);
-router.get('/results/:id', auth, getResultById);
+router.post('/results', createResult);
+router.get('/results', getAllResults);
+router.get('/results/:id', getResultById);
 
 module.exports = router;
 
