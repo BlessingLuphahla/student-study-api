@@ -16,7 +16,7 @@ const studyMaterialSchema = new mongoose.Schema(
       trim: true,
     },
     content: {
-      type: String,         // you can change this later to file info, etc.
+      type: String,     
       required: true,
     },
   },
