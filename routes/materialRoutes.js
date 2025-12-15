@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { createMaterial } = require('../controllers/materialController');
+const { getMaterial } = require('../controllers/materialController');
 
-router.post('/', createMaterial);
+router.get('/', getMaterial);
 
 module.exports = router;
 

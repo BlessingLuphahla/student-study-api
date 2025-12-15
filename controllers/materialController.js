@@ -1,24 +1,20 @@
-const StudyMaterial = require('../models/StudyMaterial');
+const StudyMaterial = require("../models/StudyMaterial");
 
-const createMaterial = async (req, res) => {
+const getMaterial = async (req, res) => {
   try {
-    const { title, subject, content, userId } = req.body;
+    const { id } = req.params;
 
-    console.log("yeah bitch");
-    
+    const material = await StudyMaterial.findById(id);
 
-    const material = await StudyMaterial.create({
-      title,
-      subject,
-      content,
-      user: userId, // later this will come from auth middleware
-    });
+    if (!material) {
+      return res.status(404).json({ message: "Material not found" });
+    }
 
-    res.status(201).json(material);
+    res.status(200).json(material);
   } catch (err) {
     console.error(err);
-    res.status(400).json({ message: 'Could not create material' });
+    res.status(400).json({ message: "Could not fetch material" });
   }
 };
 
-module.exports = { createMaterial };
+module.exports = { getMaterial };
