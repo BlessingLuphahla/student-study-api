@@ -1,4 +1,3 @@
-// controllers/examController.js
 const axios = require('axios');
 const StudyMaterial = require('../models/StudyMaterial');
 const Question = require('../models/Question');
@@ -6,7 +5,7 @@ const Exam = require('../models/Exam');
 
 const generateExam = async (req, res) => {
   try {
-    const userId = req.user.id; // from auth middleware
+    const userId = req.user.id;
     const { materialId, numQuestions = 5, difficulty = 'medium' } = req.body;
 
     const material = await StudyMaterial.findById(materialId);
@@ -40,7 +39,6 @@ ${material.textContent || material.title}
       }
     );
 
-    // Adapt this parsing to how Gemini returns text in your tests
     const rawText = response.data.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
     const parsedQuestions = JSON.parse(rawText);
 
@@ -60,7 +58,7 @@ ${material.textContent || material.title}
       userId,
       questions: questionDocs.map(q => q._id),
       totalQuestions: questionDocs.length,
-      timeLimit: 30 // minutes, or make this configurable
+      timeLimit: 30 
     });
 
     res.status(201).json({

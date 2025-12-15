@@ -1,4 +1,3 @@
-// routes/resultRoutes.js
 const express = require('express');
 const {
   createResult,

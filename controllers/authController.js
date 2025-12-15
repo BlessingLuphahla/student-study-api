@@ -4,7 +4,6 @@ const signup = async (req, res) => {
   try {
     const { email, password,name } = req.body;
 
-    // TODO: hash password properly (bcrypt)
     const user = await User.create({
       email,
       passwordHash: password,

@@ -1,4 +1,3 @@
-// models/ExamResult.js
 const mongoose = require("mongoose");
 
 const examResultSchema = new mongoose.Schema({

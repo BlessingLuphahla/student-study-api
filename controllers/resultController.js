@@ -1,10 +1,7 @@
-// controllers/resultController.js
 const ExamResult = require('../models/ExamResult');
 const Exam = require('../models/Exam');
 const Question = require('../models/Question');
 
-// POST /api/results
-// Body: { examId, userAnswers: [..], timeTaken }
 const createResult = async (req, res) => {
   try {
     const userId = req.user.id; // from auth middleware
@@ -53,7 +50,6 @@ const createResult = async (req, res) => {
   }
 };
 
-// GET /api/results
 const getAllResults = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -65,7 +61,6 @@ const getAllResults = async (req, res) => {
   }
 };
 
-// GET /api/results/:id
 const getResultById = async (req, res) => {
   try {
     const userId = req.user.id;

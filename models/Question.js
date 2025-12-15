@@ -4,7 +4,7 @@ const Question = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',          // which user owns this material
+      ref: 'User',  
     },
     title: {
       type: String,
