@@ -1,0 +1,113 @@
+POSTMAN API REQUESTS - STUDENT STUDY API
+==========================================
+
+1. HEALTH CHECK
+===============
+GET http://localhost:4000/health
+No body needed
+
+
+2. STUDY MATERIALS
+==================
+
+2.1 Create Material
+POST http://localhost:4000/api/upload
+Content-Type: application/json
+
+{
+  "title": "Introduction to Biology",
+  "subject": "Biology",
+  "content": "This is a comprehensive study material covering the basic principles of biology including cell structure, genetics, and evolution...",
+  "description": "Optional description"
+}
+
+
+2.2 Get All Materials (with pagination & filtering)
+GET http://localhost:4000/api/materials
+GET http://localhost:4000/api/materials?page=1&limit=10
+GET http://localhost:4000/api/materials?subject=Biology
+GET http://localhost:4000/api/materials?page=1&limit=5&subject=Math
+
+
+2.3 Get Specific Material
+GET http://localhost:4000/api/materials/:id
+(Replace :id with actual material ID)
+
+
+2.4 Delete Material
+DELETE http://localhost:4000/api/materials/:id
+(Replace :id with actual material ID)
+
+
+3. EXAMS
+========
+
+3.1 Generate Exam from Material
+POST http://localhost:4000/api/exam/exams/generate
+Content-Type: application/json
+
+{
+  "materialId": "paste_material_id_here",
+  "numQuestions": 5,
+  "difficulty": "medium"
+}
+
+Note: difficulty options: "easy", "medium", "hard"
+
+
+4. RESULTS
+==========
+
+4.1 Submit Exam Result
+POST http://localhost:4000/api/results
+Content-Type: application/json
+
+{
+  "examId": "paste_exam_id_here",
+  "userAnswers": [0, 1, 2, 3, 1],
+  "timeTaken": 15
+}
+
+
+4.2 Get All Results (with pagination & filtering)
+GET http://localhost:4000/api/results
+GET http://localhost:4000/api/results?page=1&limit=10
+GET http://localhost:4000/api/results?minScore=70
+GET http://localhost:4000/api/results?page=1&limit=5&minScore=50
+
+
+4.3 Get Statistics Overview
+GET http://localhost:4000/api/results/stats/overview
+
+
+4.4 Get Specific Result
+GET http://localhost:4000/api/results/:id
+(Replace :id with actual result ID)
+
+
+4.5 Delete Result
+DELETE http://localhost:4000/api/results/:id
+(Replace :id with actual result ID)
+
+
+RECOMMENDED TESTING ORDER
+==========================
+1. GET /health - Verify server is running
+2. POST /api/upload - Create a study material (save the ID)
+3. GET /api/materials - Verify material was created
+4. POST /api/exam/exams/generate - Generate exam from material (save the exam ID)
+5. POST /api/results - Submit exam answers (save the result ID)
+6. GET /api/results - View all results
+7. GET /api/results/stats/overview - View statistics
+8. GET /api/results/:id - View specific result
+9. DELETE /api/materials/:id - Delete material
+10. DELETE /api/results/:id - Delete result
+
+
+IMPORTANT NOTES
+===============
+- Replace :id placeholders with actual MongoDB ObjectIds
+- Make sure your .env file has MONGO_URI and GEMINI_API_KEY set
+- All POST/PUT requests use Content-Type: application/json
+- Responses will have success: true/false and either data or error fields
+- Default port is 4000
