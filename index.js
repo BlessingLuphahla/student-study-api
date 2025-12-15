@@ -20,14 +20,15 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-const PORT = process.env.PORT || 4000;
-
-app.listen(PORT, () => {
-  console.log("Server running on port", PORT);
-});
-
+// Routes
 app.use("/api/materials", materialRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/exam", examRoutes);
 app.use("/api/result", resultRoutes);
 app.use("/api/upload", uploadRoutes);
+
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log("Server running on port", PORT);
+});
