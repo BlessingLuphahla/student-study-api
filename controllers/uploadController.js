@@ -2,13 +2,12 @@ const StudyMaterial = require('../models/StudyMaterial');
 
 const createMaterial = async (req, res) => {
   try {
-    const { title, subject, content, userId } = req.body;
+    const { title, subject, content } = req.body;
 
     const material = await StudyMaterial.create({
       title,
       subject,
       content,
-      user: userId,
     });
 
     res.status(201).json(material);

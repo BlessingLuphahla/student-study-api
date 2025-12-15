@@ -4,7 +4,6 @@ const Question = require('../models/Question');
 
 const createResult = async (req, res) => {
   try {
-    const userId = req.user.id; // from auth middleware
     const { examId, userAnswers, timeTaken } = req.body;
 
     const exam = await Exam.findById(examId).populate('questions');
@@ -28,7 +27,6 @@ const createResult = async (req, res) => {
     const percentage = (score / exam.totalQuestions) * 100;
 
     const result = await ExamResult.create({
-      userId,
       examId,
       userAnswers,
       correctAnswers,
@@ -52,8 +50,7 @@ const createResult = async (req, res) => {
 
 const getAllResults = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const results = await ExamResult.find({ userId }).sort({ completedAt: -1 });
+    const results = await ExamResult.find({}).sort({ completedAt: -1 });
     res.status(200).json(results);
   } catch (err) {
     console.error(err);
@@ -63,10 +60,9 @@ const getAllResults = async (req, res) => {
 
 const getResultById = async (req, res) => {
   try {
-    const userId = req.user.id;
     const { id } = req.params;
 
-    const result = await ExamResult.findOne({ _id: id, userId }).populate('examId');
+    const result = await ExamResult.findOne({ _id: id }).populate('examId');
     if (!result) {
       return res.status(404).json({ message: 'Result not found' });
     }

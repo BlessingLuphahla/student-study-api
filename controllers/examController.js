@@ -5,7 +5,6 @@ const Exam = require('../models/Exam');
 
 const generateExam = async (req, res) => {
   try {
-    const userId = req.user.id;
     const { materialId, numQuestions = 5, difficulty = 'medium' } = req.body;
 
     const material = await StudyMaterial.findById(materialId);
@@ -45,7 +44,6 @@ ${material.textContent || material.title}
     const questionDocs = await Question.insertMany(
       parsedQuestions.map(q => ({
         materialId: material._id,
-        userId,
         questionText: q.questionText,
         options: q.options,
         correctAnswer: q.correctAnswer,
@@ -55,7 +53,6 @@ ${material.textContent || material.title}
     );
 
     const exam = await Exam.create({
-      userId,
       questions: questionDocs.map(q => q._id),
       totalQuestions: questionDocs.length,
       timeLimit: 30 

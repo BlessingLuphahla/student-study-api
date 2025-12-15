@@ -4,7 +4,6 @@ const connectDB = require("./config/db");
 
 const helmet = require("helmet");
 const dotenv = require("dotenv");
-const authRoutes = require("./routes/authRoutes");
 const materialRoutes = require("./routes/materialRoutes");
 const examRoutes = require("./routes/examRoute");
 const resultRoutes = require("./routes/resultRoute");
@@ -23,7 +22,6 @@ app.use(express.json());
 // Routes
 app.use("/api/materials", materialRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/exam", examRoutes);
 app.use("/api/result", resultRoutes);
 app.use("/api/upload", uploadRoutes);
 
