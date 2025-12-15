@@ -2,14 +2,18 @@ const express = require('express');
 const {
   createResult,
   getAllResults,
-  getResultById
+  getResultById,
+  deleteResult,
+  getStats
 } = require('../controllers/resultController');
 
 const router = express.Router();
 
-router.post('/results', createResult);
-router.get('/results', getAllResults);
-router.get('/results/:id', getResultById);
+router.post('/', createResult);
+router.get('/stats/overview', getStats);
+router.get('/', getAllResults);
+router.get('/:id', getResultById);
+router.delete('/:id', deleteResult);
 
 module.exports = router;
 

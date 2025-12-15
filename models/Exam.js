@@ -1,24 +1,41 @@
 const mongoose = require('mongoose');
 
-const Exam = new mongoose.Schema(
+const examSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
+    materialId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'StudyMaterial',
+      required: true
+    },
+    questions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Question'
+      }
+    ],
+    totalQuestions: {
+      type: Number,
       required: true,
-      trim: true,
+      min: 1
     },
-    subject: {
-      type: String,
-      trim: true,
-    },
-    content: {
-      type: String,     
+    timeLimit: {
+      type: Number,
       required: true,
+      default: 30
     },
+    difficulty: {
+      type: String,
+      enum: ['easy', 'medium', 'hard'],
+      default: 'medium'
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    }
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Exam', Exam);
+module.exports = mongoose.model('Exam', examSchema);
 
 
