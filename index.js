@@ -1,7 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-const helmet = require("helmet");
 const connectDB = require("./config/db");
+
+const helmet = require("helmet");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/authRoutes");
 const materialRoutes = require("./routes/materialRoutes");
@@ -14,6 +15,7 @@ connectDB();
 
 const app = express();
 
+// Middleware
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
