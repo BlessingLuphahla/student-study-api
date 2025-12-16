@@ -1,3 +1,7 @@
 node_modules
 .env
 *.pdf
+uploads/
+POSTMAN_REQUESTS.txt
+FILE_UPLOAD_SETUP.txt
+

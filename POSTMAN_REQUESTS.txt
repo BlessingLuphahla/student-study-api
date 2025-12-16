@@ -10,7 +10,7 @@ No body needed
 2. STUDY MATERIALS
 ==================
 
-2.1 Create Material
+2.1 Create Material (Text Only)
 POST http://localhost:4000/api/upload
 Content-Type: application/json
 
@@ -20,6 +20,26 @@ Content-Type: application/json
   "content": "This is a comprehensive study material covering the basic principles of biology including cell structure, genetics, and evolution...",
   "description": "Optional description"
 }
+
+
+2.1B Create Material with File Upload
+POST http://localhost:4000/api/upload
+Content-Type: multipart/form-data
+
+Form Data:
+- title: "Biology Notes"
+- subject: "Biology"
+- content: "Study notes on cell structure and genetics"
+- description: "Optional description"
+- file: (select PDF, Image, Word, or Excel file)
+
+Supported file types:
+- PDF (.pdf)
+- Images (.jpg, .jpeg, .png, .gif)
+- Word (.doc, .docx)
+- Excel (.xls, .xlsx)
+- Text (.txt)
+- Max file size: 50MB
 
 
 2.2 Get All Materials (with pagination & filtering)

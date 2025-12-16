@@ -26,6 +26,17 @@ const studyMaterialSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
+    // File storage fields
+    file: {
+      filename: String,
+      originalName: String,
+      mimetype: String,
+      size: Number, // in bytes
+      uploadedAt: {
+        type: Date,
+        default: Date.now
+      }
+    },
     createdAt: {
       type: Date,
       default: Date.now
