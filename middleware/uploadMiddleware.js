@@ -38,12 +38,15 @@ const fileFilter = (req, file, cb) => {
     'application/vnd.ms-excel' // .xls
   ];
 
-  if (allowedMimes.includes(file.mimetype)) {
+  const fileExtension = file.originalname.split('.').pop().toLowerCase();
+  const allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'txt', 'doc', 'docx', 'xls', 'xlsx'];
+
+  if (allowedMimes.includes(file.mimetype) && allowedExtensions.includes(fileExtension)) {
     cb(null, true);
   } else {
     cb(
       new Error(
-        `Invalid file type: ${file.mimetype}. Allowed types: PDF, Images (JPEG, PNG, GIF), Text, Word, Excel`
+        `Invalid file type: ${file.originalname} (${file.mimetype}). Allowed: PDF, JPG, PNG, GIF, TXT, DOC, DOCX, XLS, XLSX`
       ),
       false
     );
