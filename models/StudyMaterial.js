@@ -31,6 +31,8 @@ const studyMaterialSchema = new mongoose.Schema(
       filename: String,
       originalName: String,
       mimetype: String,
+      // relative path under uploads/ (e.g. "my_material_.../filename.jpg")
+      path: String,
       size: Number, // in bytes
       uploadedAt: {
         type: Date,

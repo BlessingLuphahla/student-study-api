@@ -1,5 +1,7 @@
 const StudyMaterial = require('../models/StudyMaterial');
-const { deleteFile } = require('../middleware/uploadMiddleware');
+const { deleteFile, STORAGE_PATH } = require('../middleware/uploadMiddleware');
+const path = require('path');
+const fs = require('fs');
 
 // Validate input
 const validateMaterialInput = (title, subject, content) => {
@@ -88,7 +90,61 @@ const createMaterial = async (req, res) => {
       }));
     }
 
-    const material = await StudyMaterial.create(materialData);
+    // Create the material record first (files will be attached/moved afterwards)
+    let material = await StudyMaterial.create(materialData);
+
+    // If files were uploaded, move them into a folder named after the material
+    if (req.files && req.files.length > 0) {
+      // sanitize folder name from title
+      const sanitize = (str = '') => {
+        return String(str)
+          .replace(/[^a-z0-9 _-]/gi, '')
+          .trim()
+          .replace(/\s+/g, '_')
+          .toLowerCase()
+          .slice(0, 50);
+      };
+
+      const folderName = `${sanitize(material.title || materialData.title)}_${material._id}`;
+      const targetDir = path.join(STORAGE_PATH, folderName);
+
+      if (!fs.existsSync(targetDir)) {
+        fs.mkdirSync(targetDir, { recursive: true });
+      }
+
+      const movedFiles = [];
+
+      for (const file of req.files) {
+        const oldPath = path.join(STORAGE_PATH, file.filename);
+        const newPath = path.join(targetDir, file.filename);
+        try {
+          fs.renameSync(oldPath, newPath);
+        } catch (moveErr) {
+          // fallback to copy & unlink
+          try {
+            fs.copyFileSync(oldPath, newPath);
+            fs.unlinkSync(oldPath);
+          } catch (copyErr) {
+            console.error('File move failed for', file.filename, moveErr, copyErr);
+            continue;
+          }
+        }
+
+        const relativePath = path.join(folderName, file.filename).replace(/\\/g, '/');
+        movedFiles.push({
+          filename: file.filename,
+          originalName: file.originalname,
+          mimetype: file.mimetype,
+          size: file.size,
+          uploadedAt: new Date(),
+          path: relativePath
+        });
+      }
+
+      // update material with moved files
+      material.files = movedFiles;
+      await material.save();
+    }
 
     res.status(201).json({
       success: true,
