@@ -13,6 +13,7 @@ if (!fs.existsSync(STORAGE_PATH)) {
 // Configure storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
+    console.log(`[Multer] Saving file to: ${STORAGE_PATH}`);
     cb(null, STORAGE_PATH);
   },
   filename: (req, file, cb) => {
@@ -20,7 +21,9 @@ const storage = multer.diskStorage({
     const uniqueSuffix = Date.now() + '_' + Math.round(Math.random() * 1E9);
     const ext = path.extname(file.originalname);
     const name = path.basename(file.originalname, ext);
-    cb(null, name + '_' + uniqueSuffix + ext);
+    const finalName = name + '_' + uniqueSuffix + ext;
+    console.log(`[Multer] Generated filename: ${finalName}`);
+    cb(null, finalName);
   }
 });
 

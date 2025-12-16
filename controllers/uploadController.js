@@ -45,17 +45,27 @@ const createMaterial = async (req, res) => {
   try {
     const { title, subject, content, description } = req.body;
 
+    // Debug logging
+    console.log('Create material request received');
+    console.log('Body:', { title, subject, content, description });
+    console.log('Files:', req.files && req.files.length > 0 ? `${req.files.length} file(s)` : 'No files');
+    if (req.files && req.files.length > 0) {
+      console.log('Files details:', req.files.map(f => `${f.filename} (${f.size} bytes)`));
+    }
+
     // Validate input
     const errors = validateMaterialInput(title, subject, content);
     if (errors.length > 0) {
-      // Delete uploaded file if validation fails
-      if (req.file) {
-        deleteFile(req.file.filename);
+      // Delete uploaded files if validation fails
+      if (req.files && req.files.length > 0) {
+        req.files.forEach(file => deleteFile(file.filename));
       }
+      console.log('Validation errors:', errors);
       return res.status(400).json({
         success: false,
         error: 'Validation failed',
-        validationErrors: errors
+        validationErrors: errors,
+        received: { title: typeof title, subject: typeof subject, content: typeof content }
       });
     }
 
@@ -67,15 +77,15 @@ const createMaterial = async (req, res) => {
       description: description ? description.trim() : ''
     };
 
-    // Add file information if file was uploaded
-    if (req.file) {
-      materialData.file = {
-        filename: req.file.filename,
-        originalName: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.size,
+    // Add file information if files were uploaded
+    if (req.files && req.files.length > 0) {
+      materialData.files = req.files.map(file => ({
+        filename: file.filename,
+        originalName: file.originalname,
+        mimetype: file.mimetype,
+        size: file.size,
         uploadedAt: new Date()
-      };
+      }));
     }
 
     const material = await StudyMaterial.create(materialData);
@@ -88,9 +98,9 @@ const createMaterial = async (req, res) => {
   } catch (err) {
     console.error('Create material error:', err);
     
-    // Delete uploaded file if database operation fails
-    if (req.file) {
-      deleteFile(req.file.filename);
+    // Delete uploaded files if database operation fails
+    if (req.files && req.files.length > 0) {
+      req.files.forEach(file => deleteFile(file.filename));
     }
     
     if (err.name === 'ValidationError') {

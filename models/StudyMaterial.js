@@ -26,12 +26,23 @@ const studyMaterialSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
-    // File storage fields
-    file: {
+    // File storage fields - support multiple files
+    files: [{
       filename: String,
       originalName: String,
       mimetype: String,
       size: Number, // in bytes
+      uploadedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }],
+    // Legacy single file field (for backwards compatibility)
+    file: {
+      filename: String,
+      originalName: String,
+      mimetype: String,
+      size: Number,
       uploadedAt: {
         type: Date,
         default: Date.now
